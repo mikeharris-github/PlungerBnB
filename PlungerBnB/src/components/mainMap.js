@@ -7,7 +7,7 @@ class MainMap extends Component {
   render() {
     return (
       <MapView 
-        style={styles.mapContainer} 
+        style={styles.mapContainer}
         showsUserLocation={true}
         followUserLocation={true}
       />
