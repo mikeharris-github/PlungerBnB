@@ -8,6 +8,7 @@ class Header extends Component {
 
   _handleRequestClick() {
     console.log("Request Plunger!");
+    fetch("http://172.28.116.238:3000/create_user");
   }
 
   _handleOfferClick() {
