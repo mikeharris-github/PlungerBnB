@@ -1,21 +1,25 @@
+'use strict';
+
 import React, { Component } from 'react';
 import { MapView } from 'react-native';
 
-import styles from '../styles/styles'
+import styles from '../styles/styles';
 
 class MainMap extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       deliverCoords: {
-        latitude: this.props.deliverCoords.latitude,
-        longitude: this.props.deliverCoords.longitude
+        latitude: 41.8872918,
+        longitude: -87.6330064
       }
+    }
   }
+
   render() {
     return (
-      <MapView 
+      <MapView
         annotations={[this.state.deliverCoords]}
         style={styles.mapContainer}
         showsUserLocation={true}

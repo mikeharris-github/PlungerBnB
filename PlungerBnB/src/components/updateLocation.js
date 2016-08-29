@@ -1,9 +1,9 @@
+'use strict';
+
 import React, { Component } from 'react';
 import { View, Text, AsyncStorage, AlertIOS } from 'react-native';
 
 import styles from './styles/styles'
-import Header from './components/header'
-import BottomBar from './components/bottomBar'
 import MainMap from './components/mainMap'
 
 class UpdateLocation extends Component {
@@ -72,9 +72,9 @@ class UpdateLocation extends Component {
           })
           .then((response) => response.json())
           .then((responseData) => {
-            console.log("responseData in app.js");
+            console.log("responseData in updateLocation");
             console.log(responseData);
-            if (!this.state.currentlyDelivering && !this.state.alertIsShown && responseData) {
+            if (!this.state.currentlyDelivering && !this.state.alertIsShown) {
               AlertIOS.alert(
                'Someone requested a plunger!!!!!',
                'Would you like to deliver??',
@@ -96,15 +96,16 @@ class UpdateLocation extends Component {
                        unique_device_token: this.state.uniqueDeviceToken,
                        requestor_id: this.state.requestorId
                      })
-                   });
+                   })
                    this.setState({
                      alertIsShown: false,
                      currentlyDelivering: true,
                      deliverLatitude: responseData.latitude,
                      deliverLongitude: responseData.longitude
-                   })
-                 }}
-               ]);
+                   });
+                 },
+               ],
+              );
 
               this.setState({alertIsShown: true});
             }
@@ -119,21 +120,9 @@ class UpdateLocation extends Component {
   render() {
     let display = this.state.showText ? this.props.text : ' ';
     return (
-      <MainMap deliverCoords={{latitude: this.state.deliverLatitude, longitude: this.state.deliverLongitude}} />
+      <MainMap deliverCoords={this.state.deliverCoords}/>
     );
   }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Header />
-        <UpdateLocation />
-        <BottomBar />
-      </View>
-    );
-  }
-}
-
-export default App;
+export default UpdateLocation;

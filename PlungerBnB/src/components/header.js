@@ -1,5 +1,7 @@
+'use strict'
+
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, AsyncStorage } from 'react-native';
 import Button from 'react-native-button';
 
 import styles from '../styles/styles'
@@ -7,21 +9,50 @@ import styles from '../styles/styles'
 class Header extends Component {
 
   _handleRequestClick() {
-    console.log("Request Plunger!");
-    fetch('http://172.28.116.238:3000/request_plunger', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        latitude: userLatitude,
-        longitude: userLongitude,
-        unique_device_token: this.state.uniqueDeviceToken
-      })
-    })
-    .then((response) => response.json())
-    .then((responseData) => console.log(responseData)).done();
+    var uniqueDeviceToken;
+    AsyncStorage.getItem('uniqueDeviceToken').then((value) => {
+      if (value) {
+        console.log("value exists!! this is value");
+        console.log(value);
+        uniqueDeviceToken = value;
+
+        console.log("Request Plunger! this is uniqueDeviceToken");
+        console.log(uniqueDeviceToken);
+        fetch('http://172.28.116.238:3000/request_plunger', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            unique_device_token: uniqueDeviceToken
+          })
+        });
+      } else {
+        console.log("value NOOOT exists!!");
+        uniqueDeviceToken = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        AsyncStorage.setItem('uniqueDeviceToken', uniqueDeviceToken);
+        console.log("this is uniqueDeviceToken");
+        console.log(uniqueDeviceToken);
+
+        console.log("Request Plunger! this is uniqueDeviceToken");
+        console.log(uniqueDeviceToken);
+        fetch('http://172.28.116.238:3000/request_plunger', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            unique_device_token: uniqueDeviceToken
+          })
+        });
+
+        console.log("afterwards ");
+      }
+    }).done();
+
+
   }
 
   _handleOfferClick() {
